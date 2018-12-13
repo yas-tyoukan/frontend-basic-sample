@@ -21,7 +21,8 @@ app.disable('x-powered-by');
 
 // -------- サーバーの起動 -------- //
 const server = http.Server(app);
-const port = process.env.NODE_PORT || 3000;
+// 環境変数でポートを設定などする。今回は省略して固定
+const port = 3000;
 server.listen(port);
 
 // -------- セッションの設定 -------- //
@@ -75,9 +76,9 @@ app.use(bodyParser.json({
 // ------ ルーティング ------ //
 app.use('/', require('./router'));
 
-// ------------------------------------------------- //
-//        以下、何のルーティングにもマッチしないorエラー        //
-// ------------------------------------------------- //
+// -------------------------------------------------
+//  以下、何のルーティングにもマッチしないorエラー
+// -------------------------------------------------
 
 // いずれのルーティングにもマッチしない(==NOT FOUND)
 app.use((req, res) => {
@@ -92,9 +93,16 @@ app.use((req, res) => {
 });
 
 // エラーハンドリング
+// 引数が4つの関数を設定すると、エラーハンドラ扱いになる
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   // 想定されるerrの内容によって場合分けなど
+  if (err.code === 'EBADCSRFTOKEN') {
+    // CSRFTokenのエラー
+    res.status(403);
+    res.json(err);
+    return;
+  }
   if (req.method !== 'GET' || /\/api\/.*/.test(req.url)) {
     // GET以外のエラー、または、'/api/*'へのアクセスならエラーオブジェクトを返す
     res.status(500 || err.status);
@@ -102,13 +110,7 @@ app.use((err, req, res) => {
     return;
   }
   // エラーページを返す
-  res.render('error', {
-    param: {
-      status: 500,
-      url: req.url,
-      message: 'internal server error',
-    },
-  });
+  res.render('error');
 });
 
 module.exports = app;

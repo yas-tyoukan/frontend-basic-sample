@@ -1,10 +1,9 @@
-const csurf = require('csurf');
-const logger = require('log4js').getLogger('router.index');
 const express = require('express');
+const csurf = require('csurf');
 
 const router = express.Router();
 
-// ------ ルーティングのログ出力 ------ //
+// ------ ルーティングのログ出力など共通処理 ------ //
 router.all('/*', (req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
@@ -23,59 +22,93 @@ router.use((req, res, next) => {
   return next();
 });
 
-// csrfToken単体で取得(認証チェック不要)
+// -------- 認証チェックが不要なルーティング設定 ここから -------- //
+// csrfToken単体で取得
 router.get('/csrf-token', (req, res) => {
   res.json({ token: res.locals.csrfToken });
 });
 
-
-// 静的ファイルのルーティング(認証チェック不要)
+// 静的ファイルのルーティング
 router.use(express.static('public'));
 
-// ログアウト(認証チェック不要)
-router.use('/logout', require('./logout'));
+// ログイン
+// eslint-disable-next-line no-unused-vars
+router.use('/login', (req, res, next) => {
+  // ログインページを返す
+  res.render('login');
+});
 
-// 認証前でもアクセス可能なURL
-// '/login'でルーティングするページ (ログイン(company_codeのパラメータ含む)、ヘルプ、パスワード忘れ)
-const loginPageRoutesUrls = /^\/(login(?:\?company_code=\w+)?|help|pasword-reminder-info|password-reset-mail|password-reset(?:\?token=.+)?)$/;
+// ログアウト
+router.get('/logout', (req, res, next) => {
+  // 未ログインの場合は何もせずに/loginにリダイレクト
+  if (!req.session.user) {
+    res.redirect('/login');
+    return;
+  }
+  // ログイン済みの場合はセッションを破棄してから/loginにリダイレクト
+  req.session.destroy((err) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.redirect('/login');
+  });
+});
+
+// ログインページに飛ばすURLの正規表現
+// SPAでログイン後のページではルーティングせずに、ログインページだけでルーティングするURLがあればここに追加する
+const urlsRoutedLoginPage = /^\/(login|logout)$/;
 
 // ログイン前にアクセス可能なAPI
-const accessibleAPIsUnlessLogin = /^\/api\/(login|company_settings\/\w+|password-reset|password-reset\/mail|password-reset\/token\/check.*)$/;
+// パスワードリセットAPIへのアクセスなど、login前でも使用するAPIがあればここに追加する
+const apisAccessibleWithoutLogin = /^\/api\/login$/;
 
-// ------ 認証チェックミドルウェア ------ //
+// ログイン画面
+router.get(urlsRoutedLoginPage, (req, res) => {
+  res.render('login');
+});
+
+// -------- 認証チェックが不要なルーティング設定 ここまで -------- //
+
+// ------------------ 認証チェック ------------------ //
 router.use((req, res, next) => {
-  if (loginPageRoutesUrls.test(req.url) || accessibleAPIsUnlessLogin.test(req.url)) {
-    // ログインページ及びログインページでブラウザ側でルーティングするページ及び、ログイン不要でアクセスできるAPIへのアクセスは認証チェックしない
+  if (apisAccessibleWithoutLogin.test(req.url)) {
+    // ログイン不要でアクセスできるAPIへのアクセスは認証チェックしない
     next();
     return;
   }
-  const session = req.session;
+  // ログイン済みかどうかチェック
+  const { session } = req;
   const authenticated = session && session.authenticated;
   if (authenticated) {
     // ログイン済みならならOK
     next();
     return;
   }
-  // 未ログイン時
+  // ----- 以下は未ログインの場合 ----- //
   // GET以外のアクセス及びAPIアクセスの禁止
   if (req.method !== 'GET' || /\/api\/.*/.test(req.url)) {
     // 401を返して終了
-    next({ statusCode: 401 });
+    // ui/index.jsのエラーハンドリングで処理される
+    next({ status: 401 });
     return;
   }
-  // APIアクセスでないGETアクセスは、ログインページを返す
-  // company_codeのパラメータがあればログインページに渡す
-  const query = 'company_code' in req.query ? `?company_code=${req.query.company_code}` : '';
-  res.redirect(`/login${query}`);
+  // APIアクセスでないGETアクセスは、すべてログインページを返す
+  res.redirect('/login');
 });
 
-// ログイン画面
-router.get(loginPageRoutesUrls, (req, res) => {
-  res.render('login');
-});
+// -------- 認証チェックが必要なルーティング設定 -------- //
 
+// 静的ファイルのルーティング
 router.use(express.static('public_authenticated'));
+
+// APIのルーティング
 router.use('/api', require('./api'));
-router.use('/', require('./top'));
+
+// ログイン後のページのルーティング
+router.get('/*', (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.render('app');
+});
 
 module.exports = router;
