@@ -103,10 +103,11 @@ app.use((err, req, res, next) => {
     res.json(err);
     return;
   }
-  if (req.method !== 'GET' || /\/api\/.*/.test(req.url)) {
+  if (req.headers['content-type'] && req.headers['content-type'].includes('json')) {
     // GET以外のエラー、または、'/api/*'へのアクセスならエラーオブジェクトを返す
-    res.status(500 || err.status);
-    res.json(err);
+    const status = (err.response && err.response.status) || err.status || 500;
+    res.status(status);
+    res.json({ status, message: err.message || 'error' });
     return;
   }
   // エラーページを返す

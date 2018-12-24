@@ -79,7 +79,7 @@ router.use((req, res, next) => {
   }
   // ログイン済みかどうかチェック
   const { session } = req;
-  const authenticated = session && session.authenticated;
+  const authenticated = session && session.user && session.user.id;
   if (authenticated) {
     // ログイン済みならならOK
     next();
@@ -94,7 +94,7 @@ router.use((req, res, next) => {
     return;
   }
   // APIアクセスでないGETアクセスは、すべてログインページを返す
-  res.redirect('/login');
+  res.render('login');
 });
 
 // -------- 認証チェックが必要なルーティング設定 -------- //
