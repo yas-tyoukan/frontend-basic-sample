@@ -5,6 +5,7 @@ import {
   propTypes as reduxFormPropTypes,
   reduxForm,
 } from 'redux-form';
+import './style.less';
 import validate from '~/form/validates/login';
 import TextField from '~/components/atoms/TextField';
 import Button from '~/components/atoms/Button';
