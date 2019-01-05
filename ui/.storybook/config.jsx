@@ -4,21 +4,9 @@ import {
   configure,
   storiesOf,
 } from '@storybook/react';
-import {
-  combineReducers,
-  createStore,
-} from 'redux';
-import { Provider } from 'react-redux';
-import { reducer as formReducer } from 'redux-form';
-import { MuiThemeProvider } from '@material-ui/core';
-import theme from '../src/styles/theme';
-import '../src/styles/main.less';
+import Wrapper from '~/components/routings/Wrapper';
 
-const store = createStore(combineReducers({ form: formReducer }), { form: {} });
-const ProviderDecorator = storyFn => <Provider store={store}>{storyFn()}</Provider>;
-const MuiThemeDecorator = storyFn => (
-  <MuiThemeProvider theme={theme}>{storyFn()}</MuiThemeProvider>
-);
+const WrapperDecorator = storyFn => <Wrapper>{storyFn()}</Wrapper>;
 
 // automatically import all files ending in *.stories.js or *.stories.jsx
 const context = require.context('../src/components', true, /\.stories.jsx?$/);
@@ -28,8 +16,7 @@ function getDirs(path) {
 }
 
 function loadStories() {
-  addDecorator(ProviderDecorator);
-  addDecorator(MuiThemeDecorator);
+  addDecorator(WrapperDecorator);
   context.keys().sort().forEach((c) => {
     const dirs = getDirs(c);
 

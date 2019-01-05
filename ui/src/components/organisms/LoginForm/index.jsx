@@ -63,8 +63,5 @@ Form.propTypes = {
 
 export default reduxForm({
   form: 'login',
-  onSubmitSuccess() {
-    window.location.href = '/';
-  },
   validate,
 })(Form);

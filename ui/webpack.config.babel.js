@@ -42,16 +42,6 @@ export default (env, args) => {
     });
   }
 
-
-  const configureFile = `./configure/configureStore.${isProduction ? 'prod' : 'dev'}`;
-  const plugins = [
-    new webpack.DefinePlugin({
-      // 環境によってビルドする対象のconfigureFileを変えるため
-      'process.env.CONFIGURE_STORE_FILE': JSON.stringify(configureFile),
-    }),
-  ];
-
-
   return {
     devtool,
     entry: {
@@ -74,6 +64,5 @@ export default (env, args) => {
       },
       extensions: ['.js', '.jsx', '.css', '.less'],
     },
-    plugins,
   };
 };
