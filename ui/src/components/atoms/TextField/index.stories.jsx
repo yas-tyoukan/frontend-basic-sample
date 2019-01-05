@@ -21,4 +21,13 @@ export default stories => stories
       error
       helperText="入力に間違いがあります"
     />
+  ))
+  .add('meta.error (redux-form想定)', () => (
+    <TextField
+      placeholder="ログインID"
+      label="ログインID"
+      input={{ onChange }}
+      error
+      meta={{ error: '入力に間違いがあります' }}
+    />
   ));

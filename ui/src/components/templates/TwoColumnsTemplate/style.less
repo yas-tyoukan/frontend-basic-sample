@@ -1,18 +1,23 @@
+@import (reference) "_variables";
 @import (reference) '/organisms/Header/style';
 
 .t_two-columns-template {
   height: 100%;
 
   > .header {
-    position: absolute;
-    height: @o_header-height;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 
   > .contents-wrapper {
     padding-top: @o_header-height;
+    height: 100%;
 
     > .top {
       height: 30%;
+      border-bottom: 1px solid .colors[gray-darken];
     }
 
     > .bottom {

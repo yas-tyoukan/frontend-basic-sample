@@ -9,8 +9,7 @@ const contentsSampleEl = (
   </>
 );
 
-export
-stories => stories
-  .add('horizontal', () => <CenteringTemplate horizontal>{contentsSampleEl})</CenteringTemplate>)
-  .add('vertical', () => <CenteringTemplate horizontal>{contentsSampleEl})</CenteringTemplate>)
-  .add('horizontal and vertical', () => <CenteringTemplate horizontal vertical>{contentsSampleEl})</CenteringTemplate>)
+export default stories => stories
+  .add('horizontal', () => <CenteringTemplate horizontal contents={contentsSampleEl} />)
+  .add('vertical', () => <CenteringTemplate vertical contents={contentsSampleEl} />)
+  .add('horizontal and vertical', () => <CenteringTemplate horizontal vertical contents={contentsSampleEl} />);

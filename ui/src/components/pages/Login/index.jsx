@@ -36,7 +36,7 @@ export default class Login extends React.PureComponent {
           onSubmit={this.onSubmit}
           onSubmitSucceed={this.onSubmitSucceed}
         />
-        <Link to={{ pathname: '/password-reminder' }}>パスワードを忘れた方はこちら</Link>
+        <Link to={{ pathname: 'login/password-reminder' }}>パスワードを忘れた方はこちら</Link>
       </>
     );
     return (

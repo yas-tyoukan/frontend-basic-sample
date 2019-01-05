@@ -1,16 +1,15 @@
 import React from 'react';
-import CenteringTemplate from '.';
+import TowColumnsTemplate from '.';
 
-const contentsSampleEl = (
-  <>
-    <h1>問題</h1>
-    <p>『エビフライ』にあって、『カキフライ』にないもの、なぁ〜んだ？</p>
-    <p>答え：エビ</p>
-  </>
-);
+const headerContents = <h1>問題</h1>;
+const topContents = <p>『エビフライ』にあって、『カキフライ』にないもの、なぁ〜んだ？</p>;
+const bottomContents = <p>答え：エビ</p>;
 
-export
-stories => stories
-  .add('horizontal', () => <CenteringTemplate horizontal>{contentsSampleEl})</CenteringTemplate>)
-  .add('vertical', () => <CenteringTemplate horizontal>{contentsSampleEl})</CenteringTemplate>)
-  .add('horizontal and vertical', () => <CenteringTemplate horizontal vertical>{contentsSampleEl})</CenteringTemplate>)
+export default stories => stories
+  .add('default', () => (
+    <TowColumnsTemplate
+      headerContents={headerContents}
+      topContents={topContents}
+      bottomContents={bottomContents}
+    />
+  ));

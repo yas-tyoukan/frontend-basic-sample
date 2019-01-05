@@ -57,7 +57,7 @@ router.get('/logout', (req, res, next) => {
 
 // ログインページに飛ばすURLの正規表現
 // SPAでログイン後のページではルーティングせずに、ログインページだけでルーティングするURLがあればここに追加する
-const urlsRoutedLoginPage = /^\/(login|logout)$/;
+const urlsRoutedLoginPage = /^\/(login(\/.*)?|logout)$/;
 
 // ログイン前にアクセス可能なAPI
 // パスワードリセットAPIへのアクセスなど、login前でも使用するAPIがあればここに追加する

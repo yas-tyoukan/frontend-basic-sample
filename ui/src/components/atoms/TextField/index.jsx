@@ -5,7 +5,7 @@ import MUITextField from '@material-ui/core/TextField';
 
 export const TextFieldContainer = ({
   error,
-  meta,
+  meta = {},
   helperText,
   presenter,
   input: inputProps,

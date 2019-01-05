@@ -8,6 +8,11 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "@material-ui/core": "^3.7.1",
+    "@storybook/addon-actions": "^4.0.11",
+    "@storybook/addon-notes": "^4.0.11",
+    "@storybook/addon-viewport": "^4.0.11",
+    "@storybook/cli": "^4.0.11",
+    "@storybook/react": "^4.0.11",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "classnames": "^2.2.6",
@@ -33,7 +38,9 @@
     "build-dev": "webpack --mode development",
     "watch": "webpack --mode development --watch --progress --colors",
     "server": "node --inspect .",
-    "start": "npm run build && node ."
+    "start": "npm run build && node .",
+    "storybook": "start-storybook -s ./public,./public_authenticated -p 6007",
+    "build-storybook": "build-storybook -s ./public,./public_authenticated"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

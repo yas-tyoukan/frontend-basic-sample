@@ -1,1 +1,13 @@
-@o_header-height: 30px;
+@import (reference) "_variables";
+
+@o_header-height: 38px;
+
+.o_header {
+  height: @o_header-height;
+  width: 100%;
+  border-bottom: 1px solid .colors[gray-darken];
+
+  > .a_button {
+    float: right;
+  }
+}
