@@ -2,6 +2,9 @@ const router = require('express').Router();
 
 // ------ APIのルーティング ここから ------ //
 router.use('/login', require('./login'));
+router.use('/logout', require('./logout'));
+router.use('/users', require('./users'));
+router.use('/notifications', require('./notifications'));
 // ------ APIのルーティング ここまで ------ //
 
 router.all('/*', (req, res) => {

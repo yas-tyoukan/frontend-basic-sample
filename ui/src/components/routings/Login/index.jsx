@@ -15,8 +15,6 @@ export default () => (
     <Route exact path="/password-reminder">
       <div>id:user1/pass:p</div>
     </Route>
-    <Route path="/*">
-      <div>NOT FOUND</div>
-    </Route>
+    <Redirect from="*" to="/login" />
   </Switch>
 );

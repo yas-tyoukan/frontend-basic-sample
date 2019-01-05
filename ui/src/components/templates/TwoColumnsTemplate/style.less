@@ -1,0 +1,22 @@
+@import (reference) '/organisms/Header/style';
+
+.t_two-columns-template {
+  height: 100%;
+
+  > .header {
+    position: absolute;
+    height: @o_header-height;
+  }
+
+  > .contents-wrapper {
+    padding-top: @o_header-height;
+
+    > .top {
+      height: 30%;
+    }
+
+    > .bottom {
+      height: 70%;
+    }
+  }
+}

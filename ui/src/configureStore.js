@@ -1,7 +1,7 @@
 import {
   applyMiddleware,
   combineReducers,
-  compose,
+  // compose,
   createStore,
 } from 'redux';
 import { reducer as formReducer } from 'redux-form';
@@ -26,6 +26,6 @@ export default function configureStore(initialState, reducers, history) {
   return createStore(
     combineReducers({ ...reducers, form: formReducer, router: connectRouter(history) }),
     initialState,
-    compose(applyMiddleware(...middleware)),
+    applyMiddleware(...middleware),
   );
 }

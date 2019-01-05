@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import LoginForm from '~/components/organisms/LoginForm';
 import CenteringTemplate from '~/components/templates/CenteringTemplate';
@@ -35,6 +36,7 @@ export default class Login extends React.PureComponent {
           onSubmit={this.onSubmit}
           onSubmitSucceed={this.onSubmitSucceed}
         />
+        <Link to={{ pathname: '/password-reminder' }}>パスワードを忘れた方はこちら</Link>
       </>
     );
     return (

@@ -55,8 +55,8 @@ export default (env, args) => {
   return {
     devtool,
     entry: {
-      'public/js/login': ['./src/login.jsx'],
-      'public_authenticated/js/app': ['./src/app.jsx'],
+      'public/js/login': ['./src/entries/login.jsx'],
+      'public_authenticated/js/app': ['./src/entries/app.jsx'],
     },
     output: {
       path: path.join(__dirname, './'),
